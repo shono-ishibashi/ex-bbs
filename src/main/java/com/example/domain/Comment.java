@@ -1,17 +1,20 @@
 package com.example.domain;
 
 public class Comment {
-    private Integer id;
+    private String id;
     private String name;
     private String content;
-    private Integer articleId;
+    private String articleId;
 
     //getter setter
-    public Integer getId() {
+
+
+
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -31,11 +34,11 @@ public class Comment {
         this.content = content;
     }
 
-    public Integer getArticleId() {
+    public String getArticleId() {
         return articleId;
     }
 
-    public void setArticleId(Integer articleId) {
+    public void setArticleId(String articleId) {
         this.articleId = articleId;
     }
 }

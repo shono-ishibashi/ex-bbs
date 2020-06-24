@@ -1,10 +1,68 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+          integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     <title>Title</title>
 </head>
 <body>
+<div class="container">
+    <form th:object="${articleForm}" th:action="@{/insert-article}">
+        <div class="form-group">
+            <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="alert-danger"></div>
+            <label for="name">投稿者名:</label><input class="form-control" id="name" type="text" th:field="*{name}">
+        </div>
+        <div class="form-group">
+            <div th:if="${#fields.hasErrors('content')}" th:errors="*{content}" class="alert-danger"></div>
+            <label for="content">投稿者内容:</label><textarea id="content" class="form-control"
+                                                         th:field="*{content}"></textarea>
+        </div>
+        <button class="btn btn-primary">記事投稿</button>
+    </form>
+    <hr>
+    <hr>
+    <div th:each="article:${application.articleList}">
+        <a class="btn btn-danger" th:href="@{/delete-article/{id}(id=${article.id})}">記事削除</a>
+        <table class="table" style="table-layout:fixed;">
+            <tr>
+                <td>投稿者名:</td>
+                <td th:text="${article.name}"></td>
+            </tr>
+            <tr>
+                <td>投稿内容:</td>
+                <td class="text-break" th:text="${article.content}"></td>
+            </tr>
+        </table>
+        <div th:each="comment:${article.commentList}">
+            <table class="table table-dark">
+                <tr>
+                    <td>コメント者名:</td>
+                    <td th:text="${comment.name}"></td>
+                </tr>
+                <tr>
+                    <td>コメント内容:</td>
+                    <td class="text-break" th:text="${comment.content}" style="table-layout:fixed;"></td>
+                </tr>
+            </table>
+        </div>
 
+        <form th:action="@{/insert-comment/{id}(id=${article.id})}" th:object="${commentForm}">
+            <div class="form-group">
+                <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="alert-danger"></div>
+                <label for="comment-name">名前：</label>
+                <input type="text" class="form-control" id="comment-name" th:field="*{name}">
+            </div>
+            <div class="form-group">
+                <div th:if="${#fields.hasErrors('content')}" th:errors="*{content}" class="alert-danger"></div>
+                <label for="comment-content">コメント：</label><br>
+                <textarea class="form-control" id="comment-content" th:field="*{content}"></textarea>
+            </div>
+            <button class="btn btn-primary">コメント投稿</button>
+        </form>
+        <hr>
+        <hr>
+    </div>
+</div>
 </body>
 </html>

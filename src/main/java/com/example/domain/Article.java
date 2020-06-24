@@ -3,17 +3,19 @@ package com.example.domain;
 import java.util.List;
 
 public class Article {
-    private Integer id;
+    private String id;
     private String name;
     private String content;
     private List<Comment> commentList;
 
     //getter setter
-    public Integer getId() {
+
+
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 
