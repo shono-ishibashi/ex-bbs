@@ -64,6 +64,9 @@ public class ArticleController {
         Article article = new Article();
         article.setName(form.getName());
         article.setContent(form.getContent());
+        
+        System.out.println(article);
+        
         articleRepository.insertArticle(article);
         return index();
     }
