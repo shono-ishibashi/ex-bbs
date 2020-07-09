@@ -55,7 +55,7 @@ public class ArticleController {
         if (result.hasErrors()){
             return index();
         }
-
+        System.out.println("いいいいい");
         Article article = new Article();
         article.setName(form.getName());
         article.setContent(form.getContent());
