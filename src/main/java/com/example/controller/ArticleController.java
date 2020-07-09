@@ -51,7 +51,7 @@ public class ArticleController {
             @Validated
             ArticleForm form,
             BindingResult result) {
-
+    	System.out.println("ああああああああああああああ");
         if (result.hasErrors()){
             return index();
         }
