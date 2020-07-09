@@ -15,7 +15,7 @@
         </div>
         <div class="form-group">
             <div th:if="${#fields.hasErrors('content')}" th:errors="*{content}" class="alert-danger"></div>
-            <label for="content">投稿者内容:</label><textarea id="content" class="form-control"
+            <label for="content">投稿内容:</label><textarea id="content" class="form-control"
                                                          th:field="*{content}"></textarea>
         </div>
         <button class="btn btn-primary">記事投稿</button>
