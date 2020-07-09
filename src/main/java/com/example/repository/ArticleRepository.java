@@ -65,7 +65,7 @@ public class ArticleRepository {
                 "ORDER BY c.id DESC " +
                 "), ',')  as array_article_id "+
                 "FROM articles as a " +
-                "ORDER BY a.id;";
+                "ORDER BY a.id desc;";
 
 
         List<Article> articleList = template.query(sql, ARTICLE_ROW_MAPPER);

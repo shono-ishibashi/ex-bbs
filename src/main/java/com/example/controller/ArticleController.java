@@ -4,6 +4,7 @@ import com.example.domain.Article;
 import com.example.domain.Comment;
 import com.example.form.ArticleForm;
 import com.example.form.CommentForm;
+import com.example.form.ParentForm;
 import com.example.repository.ArticleRepository;
 import com.example.repository.CommentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +14,12 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.ServletContext;
+import java.util.ArrayList;
 import java.util.List;
+
 @RequestMapping("/")
 @Controller
 public class ArticleController {
@@ -39,14 +43,20 @@ public class ArticleController {
         return new CommentForm();
     }
 
-    @RequestMapping("")
+    @ModelAttribute
+    private ParentForm setUpParentForm(){
+        return new ParentForm();
+    }
+
+    @RequestMapping(path = "",method = RequestMethod.GET)
     public String index(){
         List<Article> articleList = articleRepository.findAll();
         application.setAttribute("articleList",articleList);
+        Integer.valueOf("aaaa");
         return "bbs";
     }
 
-    @RequestMapping("/insert-article")
+    @RequestMapping(path = "/insert-article",method = RequestMethod.POST)
     public String insertArticle(
             @Validated
             ArticleForm form,
@@ -67,15 +77,18 @@ public class ArticleController {
     public String insertComment(
             @PathVariable ("id") String id,
             @Validated
-            CommentForm form,
-            BindingResult result){
+            ParentForm parentForm,
+            BindingResult result
+            ){
 
         if(result.hasErrors()){
             return index();
         }
         Comment comment = new Comment();
-        comment.setName(form.getName());
-        comment.setContent(form.getContent());
+        CommentForm commentForm = parentForm.getComments().get(0);
+        System.out.println(parentForm);
+        comment.setName(commentForm.getName());
+        comment.setContent(commentForm.getContent());
         comment.setArticleId(id);
         commentRepository.insertComment(comment);
         return index();

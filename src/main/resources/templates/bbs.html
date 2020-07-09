@@ -4,64 +4,77 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
           integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <!--    <script src="/data.js"></script>-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/jquery.validate.min.js"></script>
     <title>Title</title>
 </head>
 <body>
 <div class="container">
-    <form th:object="${articleForm}" th:action="@{/insert-article}">
+
+    <form th:object="${articleForm}" th:action="@{/insert-article}" id="article-form">
         <div class="form-group">
             <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="alert-danger"></div>
-            <label for="name">投稿者名:</label><input class="form-control" id="name" type="text" th:field="*{name}">
+            <label for="name">投稿者名:</label><input class="form-control" name="name" id="name" type="text"
+                                                  th:field="*{name}">
         </div>
         <div class="form-group">
             <div th:if="${#fields.hasErrors('content')}" th:errors="*{content}" class="alert-danger"></div>
-            <label for="content">投稿者内容:</label><textarea id="content" class="form-control"
+            <label for="content">投稿者内容:</label><textarea name="content" id="content" class="form-control"
                                                          th:field="*{content}"></textarea>
         </div>
         <button class="btn btn-primary">記事投稿</button>
     </form>
     <hr>
     <hr>
-    <div th:each="article:${application.articleList}">
-        <a class="btn btn-danger" th:href="@{/delete-article/{id}(id=${article.id})}">記事削除</a>
-        <table class="table" style="table-layout:fixed;">
-            <tr>
-                <td>投稿者名:</td>
-                <td th:text="${article.name}"></td>
-            </tr>
-            <tr>
-                <td>投稿内容:</td>
-                <td class="text-break" th:text="${article.content}"></td>
-            </tr>
-        </table>
-        <div th:each="comment:${article.commentList}">
-            <table class="table table-dark">
+    <div th:object="${parentForm}">
+        <div th:each="article,stat:${application.articleList}">
+            <a class="btn btn-danger" th:href="@{/delete-article/{id}(id=${article.id})}">記事削除</a>
+            <table class="table" style="table-layout:fixed;">
                 <tr>
-                    <td>コメント者名:</td>
-                    <td th:text="${comment.name}"></td>
+                    <td>投稿者名:</td>
+                    <td th:text="${article.name}"></td>
                 </tr>
                 <tr>
-                    <td>コメント内容:</td>
-                    <td class="text-break" th:text="${comment.content}" style="table-layout:fixed;"></td>
+                    <td>投稿内容:</td>
+                    <td class="text-break" th:text="${article.content}"></td>
                 </tr>
             </table>
+            <div th:each="comment:${article.commentList}">
+                <table class="table table-dark">
+                    <tr>
+                        <td>コメント者名:</td>
+                        <td th:text="${comment.name}"></td>
+                    </tr>
+                    <tr>
+                        <td>コメント内容:</td>
+                        <td class="text-break" th:text="${comment.content}" style="table-layout:fixed;"></td>
+                    </tr>
+                </table>
+            </div>
+            <form th:action="@{/insert-comment/{id}(id=${article.id})}" class="comment-form">
+                <div class="form-group">
+                    <div class="alert-danger comment-alert"
+                         th:if="${#fields.hasErrors('comments[' + stat.index + '].name')}"
+                         th:errors="*{comments[__${stat.index}__].name}"></div>
+                    <label>名前：</label>
+                    <input type="text" class="form-control" name="name"
+                           th:field="*{comments[__${stat.index}__].name}">
+                </div>
+                <div class="form-group">
+                    <div class="alert-danger comment-alert"
+                         th:if="${#fields.hasErrors('comments[' + stat.index + '].content')}"
+                         th:errors="*{comments[__${stat.index}__].content}"></div>
+                    <label>コメント：</label><br>
+                    <textarea class="form-control" name="content"
+                              th:field="*{comments[__${stat.index}__].content}"></textarea>
+                </div>
+                <input type="hidden" th:value="${article.id}">
+                <input type="submit" class="btn btn-primary insert-comment-button" value="コメント投稿">
+            </form>
+            <hr>
+            <hr>
         </div>
-
-        <form th:action="@{/insert-comment/{id}(id=${article.id})}" th:object="${commentForm}">
-            <div class="form-group">
-                <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="alert-danger"></div>
-                <label for="comment-name">名前：</label>
-                <input type="text" class="form-control" id="comment-name" th:field="*{name}">
-            </div>
-            <div class="form-group">
-                <div th:if="${#fields.hasErrors('content')}" th:errors="*{content}" class="alert-danger"></div>
-                <label for="comment-content">コメント：</label><br>
-                <textarea class="form-control" id="comment-content" th:field="*{content}"></textarea>
-            </div>
-            <button class="btn btn-primary">コメント投稿</button>
-        </form>
-        <hr>
-        <hr>
     </div>
 </div>
 </body>
