@@ -51,17 +51,28 @@ public class ArticleController {
             @Validated
             ArticleForm form,
             BindingResult result) {
-
+    	System.out.println("ああああああああああああああ");
         if (result.hasErrors()){
             return index();
         }
+<<<<<<< HEAD
+=======
+
+>>>>>>> d970d5302104ff22be6729d794a51ebb8794ba5d
         System.out.println("いいいいい");
 
         System.out.println("aaaaaa");
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> d970d5302104ff22be6729d794a51ebb8794ba5d
         Article article = new Article();
         article.setName(form.getName());
         article.setContent(form.getContent());
+        
+        System.out.println(article);
+        
         articleRepository.insertArticle(article);
         return index();
     }
