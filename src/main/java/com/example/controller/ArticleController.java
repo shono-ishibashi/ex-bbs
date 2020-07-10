@@ -55,19 +55,17 @@ public class ArticleController {
         if (result.hasErrors()){
             return index();
         }
-<<<<<<< HEAD
         System.out.println("いいいいい");
-=======
 
         System.out.println("aaaaaa");
 
->>>>>>> dd23cd660613d8451715efe152f0d7202b00c5e5
         Article article = new Article();
         article.setName(form.getName());
         article.setContent(form.getContent());
         articleRepository.insertArticle(article);
         return index();
     }
+
 
     @RequestMapping("/insert-comment/{id}")
     public String insertComment(
